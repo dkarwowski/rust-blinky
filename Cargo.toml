@@ -1,0 +1,12 @@
+[package]
+authors = ["David Karwowski <karwowski.david@gmail.com>"]
+name = "blinky"
+version = "0.1.0"
+
+[dependencies]
+cortex-m = "0.2.4"
+cortex-m-rt = "0.2.0"
+
+[dependencies.stm32f429x]
+git = "https://github.com/dkarwowski/stm32f429x"
+optional = false

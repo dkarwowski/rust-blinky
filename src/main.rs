@@ -16,7 +16,7 @@ fn main() {
 
             rcc.ahb1enr.modify(|_, w| w.gpiogen().enabled());
             gpiog.moder.modify(|_, w| w.moder13().output());
-            gpiog.otyper.modify(|_, w| w.ot15().pushpull());
+            gpiog.otyper.modify(|_, w| w.ot13().pushpull());
             gpiog.ospeedr.modify(|_, w| w.ospeedr13().high());
             gpiog.pupdr.modify(|_, w| w.pupdr13().none());
 

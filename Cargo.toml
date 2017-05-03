@@ -7,6 +7,6 @@ version = "0.1.0"
 cortex-m = "0.2.4"
 cortex-m-rt = "0.2.0"
 
-[dependencies.stm32f429x]
-git = "https://github.com/dkarwowski/stm32f429x"
+[dependencies.f4]
+git = "https://github.com/dkarwowski/f4"
 optional = false

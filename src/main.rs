@@ -3,10 +3,12 @@
 
 extern crate cortex_m;
 extern crate cortex_m_rt;
-extern crate stm32f429x;
+extern crate f4;
 
 use cortex_m::asm;
-use stm32f429x::{GPIOG, RCC};
+use f4::stm32f429x::{GPIOG, RCC};
+use f4::gpio::GPIO;
+use f4::gpio;
 
 fn main() {
     cortex_m::interrupt::free(
@@ -15,29 +17,30 @@ fn main() {
             let rcc = RCC.borrow(cs);
 
             rcc.ahb1enr.modify(|_, w| w.gpiogen().enabled());
-            gpiog.moder.modify(|_, w| w.moder13().output());
-            gpiog.otyper.modify(|_, w| w.ot13().pushpull());
-            gpiog.ospeedr.modify(|_, w| w.ospeedr13().high());
-            gpiog.pupdr.modify(|_, w| w.pupdr13().none());
+            gpiog.pin_enable(
+                gpio::PIN13,
+                gpio::Mode::Out,
+                gpio::Speed::Low,
+                gpio::Output::PushPull,
+                gpio::PullUpPullDown::NoPull
+            );
 
-            let mut count: u32;
+            let count = 13 * 5000;
 
             loop {
-                count = 13 * 5000;
                 if gpiog.odr.read().odr13().bits() != 0u8 {
-                    gpiog.bsrr.write(|w| w.br13().reset());
+                    gpiog.pin_reset(gpio::PIN13);
                 } else {
-                    gpiog.bsrr.write(|w| w.bs13().set());
+                    gpiog.pin_set(gpio::PIN13);
                 }
-                loop {
-                    count = count - 1;
-                    if count < 1 {
-                        break;
-                    }
-                }
+                delay(count);
             }
         },
     );
+}
+
+fn delay(count: u32) {
+    for _ in 0..count { cortex_m::asm::nop() }
 }
 
 #[allow(dead_code)]
